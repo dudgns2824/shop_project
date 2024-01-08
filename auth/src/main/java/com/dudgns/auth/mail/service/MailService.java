@@ -26,6 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -142,12 +143,14 @@ public class MailService {
         emailSendService.send(SendEmailObjectDto.builder()
                 .from(fromEmail)
                 .to(req.getEmail())
+                .code(code)
                 .build());
 
         return ResponseVerifyDto
                 .builder()
                 .email(req.getEmail())
                 .code(code)
+                .ticket()
                 .build();
     }
 

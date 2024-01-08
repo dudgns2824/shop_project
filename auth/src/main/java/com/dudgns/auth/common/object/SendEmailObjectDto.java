@@ -12,4 +12,5 @@ import lombok.*;
 public class SendEmailObjectDto {
     private String from;
     private String to;
+    private String code;
 }

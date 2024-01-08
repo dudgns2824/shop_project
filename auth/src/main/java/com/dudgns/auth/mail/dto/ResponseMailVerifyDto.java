@@ -9,4 +9,5 @@ import lombok.*;
 public class ResponseMailVerifyDto {
     private String email;
     private Boolean success;
+    private String ticket;
 }

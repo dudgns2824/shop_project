@@ -19,7 +19,7 @@ public class EmailSendService {
         message.setFrom(dto.getFrom());
         message.setTo(dto.getTo());
         message.setSubject("인증 메일 입니다.");
-        message.setText(String.format("%04d", Long.parseLong(RandomStringUtils.randomNumeric(4, 4), 10)));
+        message.setText(dto.getCode());
 
         javaMailSender.send(message);
         return true;
