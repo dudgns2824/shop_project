@@ -21,7 +21,11 @@ public class QUserTokenId extends BeanPath<UserTokenId> {
 
     public final StringPath AccessToken = createString("AccessToken");
 
+    public final StringPath accessToken = createString("accessToken");
+
     public final ComparablePath<java.util.UUID> UserGUID = createComparable("UserGUID", java.util.UUID.class);
+
+    public final ComparablePath<java.util.UUID> userGUID = createComparable("userGUID", java.util.UUID.class);
 
     public QUserTokenId(String variable) {
         super(UserTokenId.class, forVariable(variable));

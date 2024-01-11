@@ -1,17 +1,15 @@
 package com.dudgns.auth.entity;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenerationTime;
-import org.hibernate.annotations.UpdateTimestamp;
 
-import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -21,9 +19,7 @@ import java.util.UUID;
 @Builder
 @Entity
 @ToString
-@Table(name = UserEntity.TABLE_NAME, uniqueConstraints = {
-    @UniqueConstraint(name = "uc_userentity_userguid", columnNames = {"UserGUID"})
-})
+@Table(name = UserEntity.TABLE_NAME)
 public class UserEntity implements Serializable{
     public static final String TABLE_NAME = "user";
 
@@ -50,5 +46,5 @@ public class UserEntity implements Serializable{
     @Column(name = "user_created_date", nullable = false, columnDefinition = "DATETIME")
     @CreationTimestamp
     private LocalDateTime UserCreatedDate;
-    
+
 }
