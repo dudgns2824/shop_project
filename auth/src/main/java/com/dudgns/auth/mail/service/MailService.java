@@ -74,6 +74,8 @@ public class MailService {
                 }
             }
 
+            mailRequestEntity.setVerified(isVerified);
+
             mailRequestRepository.save(mailRequestEntity);
         } else {
             throw new EmailVerifyFailedException();
@@ -150,7 +152,6 @@ public class MailService {
                 .builder()
                 .email(req.getEmail())
                 .code(code)
-                .ticket()
                 .build();
     }
 

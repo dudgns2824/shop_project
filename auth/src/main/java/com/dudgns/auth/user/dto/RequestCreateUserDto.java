@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder(toBuilder = true)
 public class RequestCreateUserDto {
+    private String ticketUuid;
     private String email;
     private String userId;
     private String password;
