@@ -103,16 +103,31 @@ public class UserService {
             throw new LoginFailedException();
         }
 
-        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.findById(user.getUserGUID()).get();
+        if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+            Optional<RefreshTokenEntity> refreshTokenEntityOptional = refreshTokenRepository.findById(user.getUserGUID());
 
-        return ResponseUserLoginDto.builder()
-                .user(UserLoginDto.builder()
-                        .userId(user.getUserId())
+            RefreshTokenEntity refreshTokenEntity = null;
+
+            if (refreshTokenEntityOptional.isPresent()) {
+                refreshTokenEntity = refreshTokenEntityOptional.get();
+            } else {
+                refreshTokenEntity = refreshTokenRepository.save(RefreshTokenEntity.builder()
+                        .refreshToken(jwtTokenProvider.createToken(user))
                         .userGUID(user.getUserGUID())
-                        .email(user.getUserEmail())
-                        .build())
-                .refreshToken(refreshTokenEntity.getRefreshToken())
-                .build();
+                        .build());
+            }
+
+            return ResponseUserLoginDto.builder()
+                    .user(UserLoginDto.builder()
+                            .userId(user.getUserId())
+                            .userGUID(user.getUserGUID())
+                            .email(user.getUserEmail())
+                            .build())
+                    .refreshToken(refreshTokenEntity.getRefreshToken())
+                    .build();
+        } else {
+            throw new LoginFailedException();
+        }
     }
 
 }
