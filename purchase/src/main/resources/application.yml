@@ -1,0 +1,90 @@
+## 서버 설정
+server:
+  port: 8080
+  shutdown: graceful
+  name: purchase
+ 
+## 스프링 web 설정 
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3306/purchase
+    username: user
+    password: 1234
+    driver-class-name: org.mariadb.jdbc.Driver
+  redis:
+    host: ${REDIS_HOST:localhost}
+    config_endpoint: ${REDIS_CONFIG_ENDPOINT:}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+  application:
+    name: purchase
+  servlet:
+    multipart:
+      max-file-size: 512MB
+      max-request-size: 512MB  
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    pathmatch:
+      matching-strategy: ant-path-matcher  ## swagger 3.0과 스프링부트의 2.7.x 버전 설정이 상이하기
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  logging:
+    level:
+      org.hibernate.SQL: debug
+      org.hibernate.type: trace
+  mail:
+    max-request-count: 15
+    max-request-minutes: 5
+    max-request-per-time: 3
+    mail-verify-expire-time: 3
+    mail-request-expire: 86400
+    from-email: sun28242@gmail.com
+    username: sun28242@gmail.com
+    password: sgkdvgyrmgbybskb
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        smtp:
+          purchase: true
+          starttls:
+            enable: true
+  ## kafka 공통설정
+  kafka:
+    producer:
+      properties:
+        allow.auto.create.topics: false
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      properties:
+        allow.auto.create.topics: false
+      group-id: purchase
+      auto-offset-reset: latest
+      enable-auto-commit: false
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+## 스웨거 설정(spring doc)
+springdoc:
+  api-docs.enabled: true
+  packages-to-scan: com.backend
+  swagger-ui.path: /api/v1/purchase/swagger-ui
+  api-docs.path: /api/v1/purchase/api-docs
+  api-docs.groups.enabled: true
+  cache.disabled: true
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  server.url: http://localhost:8080
+
+## JWT 설정
+jwt:
+  secret: sS6BA4bV9Ng2z$47@4d72&w6&U!RLb!W
