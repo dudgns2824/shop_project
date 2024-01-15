@@ -33,11 +33,11 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-	implementation 'org.springdoc:springdoc-openapi-security:1.6.11'  //@purchaseenticationPrincipal는 무시하기위해서 추가
+	implementation 'org.springdoc:springdoc-openapi-security:1.6.11'  //@authenticationPrincipal는 무시하기위해서 추가
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.mariadb.jdbc:mariadb-java-client:3.3.0'
 	implementation 'jakarta.mail:jakarta.mail-api:2.1.2'
-	implementation 'com.purchase0:java-jwt:4.4.0'
+	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.eclipse.angus:angus-mail:2.0.2'
 
 	// openfeign

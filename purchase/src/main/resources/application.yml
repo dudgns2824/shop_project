@@ -54,7 +54,7 @@ spring:
     properties:
       mail:
         smtp:
-          purchase: true
+          auth: true
           starttls:
             enable: true
   ## kafka 공통설정

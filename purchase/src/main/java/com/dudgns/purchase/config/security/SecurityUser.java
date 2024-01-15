@@ -1,8 +1,8 @@
 package com.dudgns.purchase.config.security;
 
 import com.dudgns.purchase.entity.UserEntity;
-import org.springframework.security.core.Grantedpurchaseority;
-import org.springframework.security.core.purchaseority.SimpleGrantedpurchaseority;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.ArrayList;
@@ -13,13 +13,13 @@ public class SecurityUser extends User {
     private static final long serialVersionUID = 1L;
 
     public SecurityUser(UserEntity user) {
-        super(user.getUserId(), user.getPassword(), makeGrantedpurchaseority(user.getRole()));
+        super(user.getUserId(), user.getPassword(), makeGrantedAuthority(user.getRole()));
     }
 
-    private static List<Grantedpurchaseority> makeGrantedpurchaseority(String roleList){
+    private static List<GrantedAuthority> makeGrantedAuthority(String roleList){
         List<String> roles = Arrays.asList(roleList);
-        List<Grantedpurchaseority> list = new ArrayList<>();
-        roles.forEach(role -> list.add(new SimpleGrantedpurchaseority(role)));
+        List<GrantedAuthority> list = new ArrayList<>();
+        roles.forEach(role -> list.add(new SimpleGrantedAuthority(role)));
         return list;
     }
 }

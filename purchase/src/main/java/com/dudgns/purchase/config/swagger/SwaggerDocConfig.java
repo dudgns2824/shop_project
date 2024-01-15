@@ -11,11 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import java.util.List;
-/**
- * @purchaseor ash
- * /서비스명/swagger-ui/index.html 로 접속
- * 서비스목록 : cover, flex,
- */
+
 @Configuration
 @Profile({"local","dev","test","staging"})
 public class SwaggerDocConfig {
