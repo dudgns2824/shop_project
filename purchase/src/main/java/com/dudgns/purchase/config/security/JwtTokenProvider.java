@@ -45,18 +45,6 @@ public class JwtTokenProvider {
         secretKey = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(UserEntity user){
-        Claims claims = Jwts.claims().setSubject(user.getUserId());
-        claims.put("roles", user.getRole());
-        Date now = new Date();
-        return Jwts.builder()
-                .setClaims(claims)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
-                .compact();
-    }
-
     // Spring Security 인증 과정 중 권한 확인 필요
     public Authentication getAuthentication(String token){
         UserDetails userDetails = userDetailsService.loadUserByUsername(this.getAccount(token));
