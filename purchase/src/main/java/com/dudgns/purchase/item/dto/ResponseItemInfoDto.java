@@ -11,4 +11,9 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class ResponseItemInfoDto {
     private String itemGuid;
+    private Integer amount;
+    private Long price;
+    private String company;
+    private String description;
+    private Boolean sale;
 }

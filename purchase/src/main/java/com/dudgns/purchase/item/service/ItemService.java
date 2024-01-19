@@ -1,10 +1,14 @@
 package com.dudgns.purchase.item.service;
 
+import com.dudgns.purchase.annotation.RedissonLock;
 import com.dudgns.purchase.common.UuidStringUtil;
-import com.dudgns.purchase.entity.ItemEntity;
+import com.dudgns.purchase.entity.purchase.ItemEntity;
+import com.dudgns.purchase.exception.ItemNotExistException;
 import com.dudgns.purchase.item.dto.RequestItemInfoDto;
+import com.dudgns.purchase.item.dto.RequestItemPurchaseDto;
 import com.dudgns.purchase.item.dto.ResponseItemInfoDto;
-import com.dudgns.purchase.repository.ItemRepository;
+import com.dudgns.purchase.item.dto.ResponseItemPurchaseDto;
+import com.dudgns.purchase.repository.purchase.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +31,31 @@ public class ItemService {
         Optional<ItemEntity> itemEntityOptional = itemRepository.findById(itemGUID);
 
         if (itemEntityOptional.isPresent()) {
-
+            ItemEntity item = itemEntityOptional.get();
+            return ResponseItemInfoDto.builder()
+                    .itemGuid(item.getItemGUID().toString())
+                    .amount(item.getAmount())
+                    .price(item.getPrice())
+                    .company(item.getCompany())
+                    .description(item.getDescription())
+                    .sale(item.getSale())
+                    .build();
         } else {
-            throw
+            throw new ItemNotExistException();
         }
 
-        return ResponseItemInfoDto.builder()
+    }
 
-                .build();
+    @RedissonLock(name = "item-purchase", uuid = "#itemGuid")
+    public ResponseItemPurchaseDto purchase(String itemGuid) {
+        UUID itemGUID = UuidStringUtil.convertFromString(itemGuid);
+
+        Optional<ItemEntity> itemEntityOptional = itemRepository.findById(itemGUID);
+
+        if (itemEntityOptional.isPresent()) {
+            return null;
+        } else {
+            throw new ItemNotExistException();
+        }
     }
 }

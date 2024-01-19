@@ -1,6 +1,6 @@
 package com.dudgns.purchase.config.security;
 
-import com.dudgns.purchase.entity.UserEntity;
+import com.dudgns.purchase.entity.auth.UserEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

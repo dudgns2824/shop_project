@@ -1,6 +1,6 @@
 package com.dudgns.purchase.config.security;
 
-import com.dudgns.purchase.repository.UserRepository;
+import com.dudgns.purchase.repository.auth.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

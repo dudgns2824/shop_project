@@ -15,7 +15,7 @@ import com.querydsl.core.types.Path;
 @Generated("com.querydsl.codegen.DefaultEmbeddableSerializer")
 public class QUserTokenId extends BeanPath<UserTokenId> {
 
-    private static final long serialVersionUID = 1454700579L;
+    private static final long serialVersionUID = -1069956420L;
 
     public static final QUserTokenId userTokenId = new QUserTokenId("userTokenId");
 

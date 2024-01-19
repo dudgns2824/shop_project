@@ -7,10 +7,16 @@ server:
 ## 스프링 web 설정 
 spring:
   datasource:
-    url: jdbc:mariadb://localhost:3306/purchase
-    username: user
-    password: 1234
-    driver-class-name: org.mariadb.jdbc.Driver
+    auth:
+      jdbc-url: jdbc:mariadb://localhost:3306/auth
+      username: user
+      password: 1234
+      driver-class-name: org.mariadb.jdbc.Driver
+    purchase:
+      jdbc-url: jdbc:mariadb://localhost:3306/purchase
+      username: user
+      password: 1234
+      driver-class-name: org.mariadb.jdbc.Driver
   redis:
     host: ${REDIS_HOST:localhost}
     config_endpoint: ${REDIS_CONFIG_ENDPOINT:}
@@ -54,7 +60,7 @@ spring:
     properties:
       mail:
         smtp:
-          purchase: true
+          auth: true
           starttls:
             enable: true
   ## kafka 공통설정
