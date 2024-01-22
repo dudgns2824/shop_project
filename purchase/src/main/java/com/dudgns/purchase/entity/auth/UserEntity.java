@@ -28,7 +28,7 @@ public class UserEntity implements Serializable{
     private Integer idx;
 
     @Id
-    @Column(name = "user_guid", nullable = false, updatable = false, columnDefinition = "Binary(16)")
+    @Column(name = "user_guid", nullable = false, updatable = false, columnDefinition = "VarBinary(36)")
     private UUID UserGUID;
 
     @Column(name = "user_id", nullable = false, columnDefinition = "VARCHAR(256)")

@@ -66,7 +66,7 @@ public class JwtTokenProvider {
             if(!token.substring(0, BEARER_TYPE.length()).equalsIgnoreCase(BEARER_TYPE)){
                 return false;
             }else{
-                token = token.split(" ")[1].trim();
+                token = token.split(" ")[2].trim();
             }
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
 

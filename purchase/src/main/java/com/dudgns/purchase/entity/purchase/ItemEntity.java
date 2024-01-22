@@ -26,7 +26,7 @@ public class ItemEntity {
     private Integer idx;
 
     @Id
-    @Column(name = "item_guid", nullable = false, updatable = false, columnDefinition = "Binary(16)")
+    @Column(name = "item_guid", nullable = false, updatable = false, columnDefinition = "varBinary(36)")
     private UUID ItemGUID;
 
     @Column(name = "price")
