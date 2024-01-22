@@ -18,5 +18,5 @@ public class AccessTokenEntity {
     private UUID userGUID;
     private String accessToken;
     @TimeToLive
-    private Long expire = 86400L;
+    private Long expire = 900L;
 }
