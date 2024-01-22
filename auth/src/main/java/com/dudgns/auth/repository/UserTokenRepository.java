@@ -12,6 +12,6 @@ import java.util.UUID;
 @Repository
 public interface UserTokenRepository extends JpaRepository<UserTokenEntity, UserTokenId> {
 
-    @Query("select ut from UserTokenEntity ut where ut.id.UserGUID = ?1")
+    @Query("select ut from UserTokenEntity ut where ut.id.userGUID = ?1")
     Optional<UserTokenEntity> findByUserGuid(UUID userGuid);
 }

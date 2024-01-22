@@ -75,8 +75,8 @@ public class UserService {
 
         userTokenRepository.save(UserTokenEntity.builder()
                 .id(UserTokenId.builder()
-                        .UserGUID(userGUID)
-                        .AccessToken(token)
+                        .userGUID(userGUID)
+                        .refreshToken(token)
                         .build()
                 )
                 .expireDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS))
@@ -121,13 +121,13 @@ public class UserService {
 
             if (userTokenEntityOptional.isPresent()) {
                 UserTokenEntity userTokenEntity = userTokenEntityOptional.get();
-                userTokenEntity.getId().setAccessToken(token);
+                userTokenEntity.getId().setRefreshToken(token);
                 userTokenRepository.save(userTokenEntity);
             } else {
                 userTokenRepository.save(UserTokenEntity.builder()
                         .id(UserTokenId.builder()
-                                .UserGUID(user.getUserGUID())
-                                .AccessToken(token)
+                                .userGUID(user.getUserGUID())
+                                .refreshToken(token)
                                 .build()
                         )
                         .expireDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS))
