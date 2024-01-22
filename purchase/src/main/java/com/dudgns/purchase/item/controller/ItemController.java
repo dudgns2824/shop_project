@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/purchase/item")
-public class PurchaseController {
+public class ItemController {
 
     private final ItemService itemService;
 
