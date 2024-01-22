@@ -4,14 +4,14 @@ import com.dudgns.auth.config.security.JwtTokenProvider;
 import com.dudgns.auth.entity.UserEntity;
 import com.dudgns.auth.entity.UserTokenEntity;
 import com.dudgns.auth.entity.id.UserTokenId;
+import com.dudgns.auth.entity.redis.AccessTokenEntity;
 import com.dudgns.auth.entity.redis.MailRequestEntity;
-import com.dudgns.auth.entity.redis.RefreshTokenEntity;
 import com.dudgns.auth.enums.RolesEnum;
 import com.dudgns.auth.exception.*;
 import com.dudgns.auth.repository.UserRepository;
 import com.dudgns.auth.repository.UserTokenRepository;
 import com.dudgns.auth.repository.redis.MailRequestRepository;
-import com.dudgns.auth.repository.redis.RefreshTokenRepository;
+import com.dudgns.auth.repository.redis.AccessTokenRepository;
 import com.dudgns.auth.user.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,8 +21,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -34,7 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserTokenRepository userTokenRepository;
     private final JwtTokenProvider jwtTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final AccessTokenRepository accessTokenRepository;
     private final MailRequestRepository mailRequestRepository;
     private final PasswordEncoder passwordEncoder;
 
@@ -104,18 +102,38 @@ public class UserService {
         }
 
         if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
-            Optional<RefreshTokenEntity> refreshTokenEntityOptional = refreshTokenRepository.findById(user.getUserGUID());
+            Optional<AccessTokenEntity> accessTokenEntityOptional = accessTokenRepository.findById(user.getUserGUID());
 
-            RefreshTokenEntity refreshTokenEntity = null;
+            AccessTokenEntity accessTokenEntity = null;
 
-            if (refreshTokenEntityOptional.isPresent()) {
-                refreshTokenEntity = refreshTokenEntityOptional.get();
+            if (accessTokenEntityOptional.isPresent()) {
+                accessTokenEntity = accessTokenEntityOptional.get();
             } else {
-                refreshTokenEntity = refreshTokenRepository.save(RefreshTokenEntity.builder()
-                        .refreshToken(jwtTokenProvider.createToken(user))
+                accessTokenEntity = accessTokenRepository.save(AccessTokenEntity.builder()
+                        .accessToken(jwtTokenProvider.createToken(user))
                         .userGUID(user.getUserGUID())
                         .build());
             }
+
+            Optional<UserTokenEntity> userTokenEntityOptional = userTokenRepository.findByUserGuid(user.getUserGUID());
+
+            String token = jwtTokenProvider.createToken(user);
+
+            if (userTokenEntityOptional.isPresent()) {
+                UserTokenEntity userTokenEntity = userTokenEntityOptional.get();
+                userTokenEntity.getId().setAccessToken(token);
+                userTokenRepository.save(userTokenEntity);
+            } else {
+                userTokenRepository.save(UserTokenEntity.builder()
+                        .id(UserTokenId.builder()
+                                .UserGUID(user.getUserGUID())
+                                .AccessToken(token)
+                                .build()
+                        )
+                        .expireDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS))
+                        .build());
+            }
+
 
             return ResponseUserLoginDto.builder()
                     .user(UserLoginDto.builder()
@@ -123,7 +141,7 @@ public class UserService {
                             .userGUID(user.getUserGUID())
                             .email(user.getUserEmail())
                             .build())
-                    .refreshToken(refreshTokenEntity.getRefreshToken())
+                    .accessToken(accessTokenEntity.getAccessToken())
                     .build();
         } else {
             throw new LoginFailedException();

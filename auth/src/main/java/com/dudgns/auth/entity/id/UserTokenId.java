@@ -14,8 +14,8 @@ import java.util.UUID;
 @Getter
 @Setter
 public class UserTokenId implements Serializable {
-    @Column(name = "user_guid", nullable = false, updatable = false)
-    private UUID UserGUID;
-    @Column(name = "access_token", nullable = false, updatable = false)
-    private String AccessToken;
+    @Column(name = "user_guid", nullable = false)
+    private UUID userGUID;
+    @Column(name = "refresh_token", nullable = false)
+    private String refreshToken;
 }

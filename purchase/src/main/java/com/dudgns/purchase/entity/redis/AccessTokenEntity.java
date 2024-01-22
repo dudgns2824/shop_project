@@ -1,4 +1,4 @@
-package com.dudgns.auth.entity.redis;
+package com.dudgns.purchase.entity.redis;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +12,11 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-@RedisHash(value = "refreshToken")
-public class RefreshTokenEntity {
+@RedisHash(value = "accessToken")
+public class AccessTokenEntity {
     @Id
     private UUID userGUID;
-    private String refreshToken;
+    private String accessToken;
     @TimeToLive
     private Long expire = 86400L;
 }

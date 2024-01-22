@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class ResponseUserLoginDto {
     private UserLoginDto user;
-    private String refreshToken;
+    private String accessToken;
 }
