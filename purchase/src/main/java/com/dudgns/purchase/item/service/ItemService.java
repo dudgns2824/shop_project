@@ -31,9 +31,11 @@ public class ItemService {
         Optional<ItemEntity> itemEntityOptional = itemRepository.findById(itemGUID);
 
         if (itemEntityOptional.isPresent()) {
+
             ItemEntity item = itemEntityOptional.get();
+
             return ResponseItemInfoDto.builder()
-                    .itemGuid(item.getItemGUID().toString())
+                    .itemGuid(item.getItemGuid().toString())
                     .amount(item.getAmount())
                     .price(item.getPrice())
                     .company(item.getCompany())
@@ -46,7 +48,7 @@ public class ItemService {
 
     }
 
-    @RedissonLock(name = "item-purchase", uuid = "#itemGuid")
+    @RedissonLock(name = "item-purchase", uuid = "#itemGuid") /*아직 reddison 개발 중*/
     public ResponseItemPurchaseDto purchase(String itemGuid) {
         UUID itemGUID = UuidStringUtil.convertFromString(itemGuid);
 

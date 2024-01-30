@@ -27,7 +27,7 @@ public class ItemEntity {
 
     @Id
     @Column(name = "item_guid", nullable = false, updatable = false, columnDefinition = "varBinary(36)")
-    private UUID ItemGUID;
+    private UUID itemGuid;
 
     @Column(name = "price")
     private Long price;
