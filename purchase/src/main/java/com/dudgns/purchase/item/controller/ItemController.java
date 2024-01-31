@@ -36,7 +36,7 @@ public class ItemController {
 
     @PostMapping("purchase")
     public ResponseEntity<BaseRepsonseDto> purchase(RequestItemPurchaseDto req) {
-        ResponseItemPurchaseDto res = itemService.purchase(req.getItemGuid());
+        ResponseItemPurchaseDto res = itemService.purchase(req.getItemGuid(), req.getUserGuid());
         return ResponseEntity.ok(BaseRepsonseDto.builder()
                 .statusCode(200)
                 .status("정상")

@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class RequestItemPurchaseDto {
     private String itemGuid;
+    private String userGuid;
 }
