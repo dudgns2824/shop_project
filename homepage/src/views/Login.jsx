@@ -12,17 +12,13 @@ import {
     Col,
 } from "reactstrap";
 
-/*
-const loginformStyle = {
-    loginFormCenter: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
-    }
-}
-*/
+import { Modal } from 'flowbite-react';
+import {useState} from "react";
+
 
 export default function Login() {
+    const [openModal, setOpenModal] = useState(false);
+
     return (
         <>
             <Col lg="5" md="8">
@@ -95,8 +91,13 @@ export default function Login() {
                                 </label>
                             </div>
                             <div className="text-center">
-                                <Button className="my-4" color="primary" type="button">
+                                <Button className="my-4" color="primary" type="button" size="lg">
                                     Sign in
+                                </Button>
+                            </div>
+                            <div className="text-center">
+                                <Button color="default" type="button" className="signButton" size="lg" href="../auth/register">
+                                    Sign up
                                 </Button>
                             </div>
                         </Form>
