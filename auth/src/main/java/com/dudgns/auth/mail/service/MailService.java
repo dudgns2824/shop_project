@@ -93,54 +93,47 @@ public class MailService {
 
         String code = String.format("%06d", Long.parseLong(RandomStringUtils.randomNumeric(6, 6), 10));
 
-        Boolean isSuccess = false;
-
         LocalDateTime now = LocalDateTime.now();
 
-        if (mailRequestEntityOptional.isPresent()) {
-            MailRequestEntity mailRequestEntity = mailRequestEntityOptional.get();
+        mailRequestEntityOptional.ifPresentOrElse(
+                mailRequestEntity -> {
+                    List<RequestMailDto> requestMailDtoList = mailRequestEntity.getRequests();
 
-            List<RequestMailDto> requestMailDtoList = mailRequestEntity.getRequests();
+                    if (requestMailDtoList.size() >= maxRequestCount) {
+                        throw new EmailVerifyMaxRequestException();
+                    }
 
-            int cnt = 1;
+                    if (requestMailDtoList.stream()
+                            .filter(requestMailDto -> now.minus(maxRequestMinutes, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()))
+                            .count() > maxRequestPerTime) throw new EmailVerifyMaxRequestPerTimeException();
 
-            if (requestMailDtoList.size() >= maxRequestCount) {
-                throw new EmailVerifyMaxRequestException();
-            }
+                    mailRequestEntity.getRequests().add(RequestMailDto.builder()
+                            .confirm(false)
+                            .type(VerifyType.REGISTER)
+                            .code(code)
+                            .requestTime(now)
+                            .build());
 
-            for (RequestMailDto requestMailDto : requestMailDtoList) {
-                if (now.minus(maxRequestMinutes, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime())) cnt++;
-
-                if (cnt > maxRequestPerTime) {
-                    throw new EmailVerifyMaxRequestPerTimeException();
+                    mailRequestRepository.save(mailRequestEntity);
                 }
-            }
+                , () -> {
+                    List<RequestMailDto> requestMailDtoList = new ArrayList<>();
 
-            mailRequestEntity.getRequests().add(RequestMailDto.builder()
-                    .confirm(false)
-                    .type(VerifyType.REGISTER)
-                    .code(code)
-                    .requestTime(now)
-                    .build());
+                    requestMailDtoList.add(RequestMailDto.builder()
+                            .code(code)
+                            .verified(false)
+                            .confirm(false)
+                            .requestTime(now)
+                            .build());
 
-            mailRequestRepository.save(mailRequestEntity);
-        } else {
-            List<RequestMailDto> requestMailDtoList = new ArrayList<>();
-
-            requestMailDtoList.add(RequestMailDto.builder()
-                    .code(code)
-                    .verified(false)
-                    .confirm(false)
-                    .requestTime(now)
-                    .build());
-
-            mailRequestRepository.save(MailRequestEntity.builder()
-                    .email(req.getEmail())
-                    .verified(false)
-                    .expire(mailRequestExpire)
-                    .requests(requestMailDtoList)
-                    .build());
-        }
+                    mailRequestRepository.save(MailRequestEntity.builder()
+                            .email(req.getEmail())
+                            .verified(false)
+                            .expire(mailRequestExpire)
+                            .requests(requestMailDtoList)
+                            .build());
+                }
+        );
 
         emailSendService.send(SendEmailObjectDto.builder()
                 .from(fromEmail)
