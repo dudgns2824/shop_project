@@ -26,7 +26,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
@@ -57,32 +57,29 @@ public class MailService {
     private final MailRequestRepository mailRequestRepository;
 
     public ResponseMailVerifyDto verify(RequestMailVerifyDto req) {
+        final boolean[] isVerified = {false};
 
-        Optional<MailRequestEntity> mailRequestEntityOptional = mailRequestRepository.findById(req.getEmail());
+        mailRequestRepository.findById(req.getEmail()).ifPresentOrElse(
+                mailRequestEntity -> {
+                    AtomicBoolean isVerifiedAtomic = new AtomicBoolean(false);
+                    mailRequestEntity.getRequests().forEach(requestMailDto -> {
+                        if (LocalDateTime.now().minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(String.format("%06d", req.getCode()))) {
+                            requestMailDto.setVerified(true);
+                            isVerifiedAtomic.set(true);
+                        }
+                    });
+                    mailRequestEntity.setVerified(isVerifiedAtomic.get());
+                    isVerified[0] = isVerifiedAtomic.get();
 
-        boolean isVerified = false;
-
-        LocalDateTime now = LocalDateTime.now();
-
-        if (mailRequestEntityOptional.isPresent()) {
-            MailRequestEntity mailRequestEntity = mailRequestEntityOptional.get();
-
-            for (RequestMailDto requestMailDto : mailRequestEntity.getRequests()) {
-                if (now.minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(String.format("%06d", req.getCode()))) {
-                    requestMailDto.setVerified(true);
-                    isVerified = true;
+                    mailRequestRepository.save(mailRequestEntity);
                 }
-            }
+                ,
+                () -> {throw new EmailVerifyFailedException();}
+        );
 
-            mailRequestEntity.setVerified(isVerified);
-
-            mailRequestRepository.save(mailRequestEntity);
-        } else {
-            throw new EmailVerifyFailedException();
-        }
 
         return ResponseMailVerifyDto.builder()
-                .success(isVerified)
+                .success(isVerified[0])
                 .email(req.getEmail())
                 .build();
 
