@@ -12,7 +12,12 @@ import {
     Col,
 } from "reactstrap";
 
+import React from "react"
+import {axiosApi} from "../lib/axiosApi"
+
 const Register = () => {
+    const [mail, setMail] = React.useState(0);
+
     return (
         <>
             <Col lg="6" md="8">
@@ -60,24 +65,27 @@ const Register = () => {
                     </CardHeader>
                     <CardBody className="px-lg-5 py-lg-5">
                         <div className="text-center text-muted mb-4">
-                            <small>Or sign up with credentials</small>
+                            <small>메일 인증</small>
                         </div>
                         <Form role="form">
                             <FormGroup>
-                                <InputGroup className="input-group-alternative mb-3">
+                                <InputGroup className="input-group-alternative mb-4">
+                                    <Input onChange={e => setMail(e.target.value)} placeholder="이메일 주소" type="text"/>
                                     <input-group-addon addonType="prepend">
-                                        <InputGroupText>
-                                            <i className="ni ni-hat-3" />
-                                        </InputGroupText>
+                                        <Button onClick={() => sendRegisterMail(mail)} color="primary">메일 인증</Button>
                                     </input-group-addon>
-                                    <Input placeholder="Name" type="text" />
+                                </InputGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <InputGroup className="input-group-alternative mb-4">
+                                    <Input placeholder="인증 번호" type="text"/>
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-3">
                                     <input-group-addon addonType="prepend">
                                         <InputGroupText>
-                                            <i className="ni ni-email-83" />
+                                            <i className="ni ni-email-83"/>
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
@@ -91,7 +99,7 @@ const Register = () => {
                                 <InputGroup className="input-group-alternative">
                                     <input-group-addon addonType="prepend">
                                         <InputGroupText>
-                                            <i className="ni ni-lock-circle-open" />
+                                            <i className="ni ni-lock-circle-open"/>
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
@@ -141,5 +149,13 @@ const Register = () => {
         </>
     );
 };
+
+const sendRegisterMail = async (mail) => {
+    const res = await axiosApi.get('/auth/mail/request', {
+        email: mail
+    });
+
+    return ;
+}
 
 export default Register;
