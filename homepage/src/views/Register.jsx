@@ -17,6 +17,7 @@ import {axiosApi} from "../lib/axiosApi"
 
 const Register = () => {
     const [mail, setMail] = React.useState(0);
+    const [verifyCode, setVerifyCode] = React.useState(0);
 
     return (
         <>
@@ -78,7 +79,10 @@ const Register = () => {
                             </FormGroup>
                             <FormGroup>
                                 <InputGroup className="input-group-alternative mb-4">
-                                    <Input placeholder="인증 번호" type="text"/>
+                                    <Input onChange={e => setVerifyCode(e.target.value)} placeholder="인증 번호" type="text"/>
+                                    <input-group-addon addonType="prepend">
+                                        <Button onClick={() => verifyRegisterMail(mail, verifyCode)} color="primary">인증 완료</Button>
+                                    </input-group-addon>
                                 </InputGroup>
                             </FormGroup>
                             <FormGroup>
@@ -151,14 +155,24 @@ const Register = () => {
 };
 
 const sendRegisterMail = async (mail) => {
-    console.log('test')
     const res = await axiosApi.get('/api/v1/auth/mail/request', {
-        data: {
-            mail: mail
+        params: {
+            "email": mail
         }
     });
 
-    return ;
+    return;
+}
+
+const verifyRegisterMail = async (mail, verifyCode) => {
+    const res = await axiosApi.get('/api/v1/auth/mail/verify', {
+        params: {
+            "email": mail,
+            "code": verifyCode
+        }
+    });
+
+    return;
 }
 
 export default Register;

@@ -1,5 +1,6 @@
 package com.dudgns.auth.mail.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

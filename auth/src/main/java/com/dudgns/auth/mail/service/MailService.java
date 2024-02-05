@@ -85,8 +85,8 @@ public class MailService {
 
     }
 
-    public ResponseVerifyDto request(RequestVerifyDto req) {
-        Optional<MailRequestEntity> mailRequestEntityOptional = mailRequestRepository.findById(req.getEmail());
+    public ResponseVerifyDto request(String email) {
+        Optional<MailRequestEntity> mailRequestEntityOptional = mailRequestRepository.findById(email);
 
         String code = String.format("%06d", Long.parseLong(RandomStringUtils.randomNumeric(6, 6), 10));
 
@@ -124,7 +124,7 @@ public class MailService {
                             .build());
 
                     mailRequestRepository.save(MailRequestEntity.builder()
-                            .email(req.getEmail())
+                            .email(email)
                             .verified(false)
                             .expire(mailRequestExpire)
                             .requests(requestMailDtoList)
@@ -134,13 +134,13 @@ public class MailService {
 
         emailSendService.send(SendEmailObjectDto.builder()
                 .from(fromEmail)
-                .to(req.getEmail())
+                .to(email)
                 .code(code)
                 .build());
 
         return ResponseVerifyDto
                 .builder()
-                .email(req.getEmail())
+                .email(email)
                 .code(code)
                 .build();
     }

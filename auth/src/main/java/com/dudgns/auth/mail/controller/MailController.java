@@ -21,9 +21,9 @@ public class MailController {
     private final MailService mailService;
 
     @GetMapping("/request")
-    public ResponseEntity<BaseRepsonseDto> request(@RequestBody @Valid RequestVerifyDto req) {
+    public ResponseEntity<BaseRepsonseDto> request(@RequestParam("email") String email) {
 
-        ResponseVerifyDto dto = mailService.request(req);
+        ResponseVerifyDto dto = mailService.request(email);
 
         return ResponseEntity.ok(
                 BaseRepsonseDto.builder()
