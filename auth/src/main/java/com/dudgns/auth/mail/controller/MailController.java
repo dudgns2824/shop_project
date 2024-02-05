@@ -1,12 +1,9 @@
 package com.dudgns.auth.mail.controller;
 
 import com.dudgns.auth.dto.BaseRepsonseDto;
-import com.dudgns.auth.mail.dto.RequestMailVerifyDto;
-import com.dudgns.auth.mail.dto.RequestVerifyDto;
 import com.dudgns.auth.mail.dto.ResponseMailVerifyDto;
 import com.dudgns.auth.mail.dto.ResponseVerifyDto;
 import com.dudgns.auth.mail.service.MailService;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +18,7 @@ public class MailController {
     private final MailService mailService;
 
     @GetMapping("/request")
-    public ResponseEntity<BaseRepsonseDto> request(@RequestParam("email") String email) {
+    public ResponseEntity<BaseRepsonseDto> request(@RequestParam(value = "email") String email) {
 
         ResponseVerifyDto dto = mailService.request(email);
 
@@ -35,8 +32,9 @@ public class MailController {
     }
 
     @GetMapping("/verify")
-    public ResponseEntity<BaseRepsonseDto> verifyMail(@RequestBody @Valid RequestMailVerifyDto req) {
-        ResponseMailVerifyDto dto = mailService.verify(req);
+    public ResponseEntity<BaseRepsonseDto> verifyMail(@RequestParam(value = "email") String email,
+                                                      @RequestParam(value = "code") String code) {
+        ResponseMailVerifyDto dto = mailService.verify(email, code);
 
         return ResponseEntity.ok(
                 BaseRepsonseDto.builder()

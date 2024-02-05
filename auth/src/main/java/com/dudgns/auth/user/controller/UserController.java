@@ -5,14 +5,12 @@ import com.dudgns.auth.exception.EmailAlreadyExistsException;
 import com.dudgns.auth.exception.LoginFailedException;
 import com.dudgns.auth.exception.NotVerifiedException;
 import com.dudgns.auth.user.dto.RequestCreateUserDto;
-import com.dudgns.auth.user.dto.RequestUserLoginDto;
 import com.dudgns.auth.user.dto.ResponseCreateUserDto;
 import com.dudgns.auth.user.dto.ResponseUserLoginDto;
 import com.dudgns.auth.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -55,11 +53,12 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public ResponseEntity<BaseRepsonseDto> loginUser(@RequestBody @Valid RequestUserLoginDto req) {
+    public ResponseEntity<BaseRepsonseDto> loginUser(@RequestParam(value = "userId") String userId,
+                                                     @RequestParam(value = "password") String password) {
         ResponseUserLoginDto dto = null;
 
         try {
-            dto = userService.loginUser(req);
+            dto = userService.loginUser(userId, password);
         } catch (LoginFailedException lfe) {
             return ResponseEntity.ok(BaseRepsonseDto.builder()
                     .statusCode(9999)

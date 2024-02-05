@@ -90,9 +90,7 @@ public class UserService {
                 .build();
     }
 
-    public ResponseUserLoginDto loginUser(RequestUserLoginDto dto) {
-
-        String userId = dto.getUserId();
+    public ResponseUserLoginDto loginUser(String userId, String password) {
         UserEntity user = null;
 
         if (userId != null && !userId.equals("")) {
@@ -101,7 +99,7 @@ public class UserService {
             throw new LoginFailedException();
         }
 
-        if (passwordEncoder.matches(dto.getPassword(), user.getPassword())) {
+        if (passwordEncoder.matches(password, user.getPassword())) {
             Optional<AccessTokenEntity> accessTokenEntityOptional = accessTokenRepository.findById(user.getUserGUID());
 
             AccessTokenEntity accessTokenEntity = null;

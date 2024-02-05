@@ -8,8 +8,6 @@ import com.dudgns.auth.enums.VerifyType;
 import com.dudgns.auth.exception.EmailVerifyFailedException;
 import com.dudgns.auth.exception.EmailVerifyMaxRequestException;
 import com.dudgns.auth.exception.EmailVerifyMaxRequestPerTimeException;
-import com.dudgns.auth.mail.dto.RequestMailVerifyDto;
-import com.dudgns.auth.mail.dto.RequestVerifyDto;
 import com.dudgns.auth.mail.dto.ResponseMailVerifyDto;
 import com.dudgns.auth.mail.dto.ResponseVerifyDto;
 import com.dudgns.auth.repository.redis.MailRequestRepository;
@@ -56,14 +54,14 @@ public class MailService {
 
     private final MailRequestRepository mailRequestRepository;
 
-    public ResponseMailVerifyDto verify(RequestMailVerifyDto req) {
+    public ResponseMailVerifyDto verify(String email, String code) {
         final boolean[] isVerified = {false};
 
-        mailRequestRepository.findById(req.getEmail()).ifPresentOrElse(
+        mailRequestRepository.findById(email).ifPresentOrElse(
                 mailRequestEntity -> {
                     AtomicBoolean isVerifiedAtomic = new AtomicBoolean(false);
                     mailRequestEntity.getRequests().forEach(requestMailDto -> {
-                        if (LocalDateTime.now().minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(String.format("%06d", req.getCode()))) {
+                        if (LocalDateTime.now().minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(String.format("%06d", code))) {
                             requestMailDto.setVerified(true);
                             isVerifiedAtomic.set(true);
                         }
@@ -80,7 +78,7 @@ public class MailService {
 
         return ResponseMailVerifyDto.builder()
                 .success(isVerified[0])
-                .email(req.getEmail())
+                .email(email)
                 .build();
 
     }
