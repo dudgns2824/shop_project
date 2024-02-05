@@ -151,8 +151,11 @@ const Register = () => {
 };
 
 const sendRegisterMail = async (mail) => {
-    const res = await axiosApi.get('/auth/mail/request', {
-        email: mail
+    console.log('test')
+    const res = await axiosApi.get('/api/v1/auth/mail/request', {
+        data: {
+            mail: mail
+        }
     });
 
     return ;
