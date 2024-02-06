@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import React from "react"
-import {axiosApi} from "../lib/axiosApi"
+import {axiosApi} from "../../lib/axiosApi"
 
 const Register = () => {
     const [mail, setMail] = React.useState(0);
@@ -38,7 +38,7 @@ const Register = () => {
                   <img
                       alt="..."
                       src={
-                          require("../assets/img/icons/common/github.svg")
+                          require("../../assets/img/icons/common/github.svg")
                               .default
                       }
                   />
@@ -55,7 +55,7 @@ const Register = () => {
                   <img
                       alt="..."
                       src={
-                          require("../assets/img/icons/common/google.svg")
+                          require("../../assets/img/icons/common/google.svg")
                               .default
                       }
                   />

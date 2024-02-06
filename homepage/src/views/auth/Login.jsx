@@ -13,7 +13,7 @@ import {
 } from "reactstrap";
 
 import {useState} from "react";
-import {axiosApi} from "../lib/axiosApi";
+import {axiosApi} from "../../lib/axiosApi";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -23,7 +23,6 @@ const Login = () => {
     const [userPassword, setUserPassword] = useState(false);
 
     const clickLoginButton = (userId, userPassword) => {
-
         const res = axiosApi.get('/api/v1/auth/user/login', {
             params:
                 {
@@ -31,11 +30,11 @@ const Login = () => {
                     password: userPassword
                 }
         }).then(e => {
+            localStorage.setItem('accessToken', e.data.data.accessToken);
             navigate('/dashboard')
-        })
-            .catch(e => {
-                console.log(e)
-            });
+        }).catch(e => {
+            console.log(e)
+        });
 
         return ;
     }
@@ -59,7 +58,7 @@ const Login = () => {
                   <img
                       alt="..."
                       src={
-                          require("../assets/img/icons/common/google.svg")
+                          require("../../assets/img/icons/common/google.svg")
                               .default
                       }
                   />

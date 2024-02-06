@@ -4,29 +4,33 @@ import {
     RouterProvider,
     createBrowserRouter,
     createRoutesFromElements,
-    Route,
-    Link
+    Route
 } from "react-router-dom"
 import "./assets/dashboard-react.css"
 
 import Layout from "./layouts/AuthLayouts"
-import Login from "./views/Login"
-import Register from "./views/Register"
+import Login from "./views/auth/Login"
+import Register from "./views/auth/Register"
+import Dashboard from "./views/home/dashboard/Dashboard";
 
 const router = createBrowserRouter(createRoutesFromElements(
-    <Route path="/auth" element={<Layout/>}>
-        <Route path="login" element={<Login/>}/>
-        <Route path="register" element={<Register/>}/>
+    <Route path="/">
+        <Route path="/auth" element={<Layout/>}>
+            <Route path="login" element={<Login/>}/>
+            <Route path="register" element={<Register/>}/>
+        </Route>
+        <Route path="/home" element={<Layout/>}>
+            <Route path="dashboard" element={<Dashboard/>}/>
+        </Route>
     </Route>
-
 ))
 
 function App() {
     return (
-        <RouterProvider router={router} />
+        <RouterProvider router={router}/>
     )
 }
 
 ReactDOM
     .createRoot(document.getElementById('root'))
-    .render(<App />);
+    .render(<App/>);
