@@ -7291,6 +7291,10 @@ button.bg-darker:focus {
     flex-shrink: 0 !important;
 }
 
+.sign-button {
+    width: 200px !important;
+}
+
 .flex-shrink-1 {
     flex-shrink: 1 !important;
 }

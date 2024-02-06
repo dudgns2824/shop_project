@@ -91,13 +91,13 @@ export default function Login() {
                                 </label>
                             </div>
                             <div className="text-center">
-                                <Button className="my-4" color="primary" type="button" size="lg">
-                                    Sign in
+                                <Button className="my-4 sign-button" color="primary" type="button" size="lg">
+                                    로그인
                                 </Button>
                             </div>
                             <div className="text-center">
-                                <Button color="default" type="button" className="signButton" size="lg" href="../auth/register">
-                                    Sign up
+                                <Button color="default" type="button" className="sign-button" size="lg" href="../auth/register">
+                                    회원 가입
                                 </Button>
                             </div>
                         </Form>
