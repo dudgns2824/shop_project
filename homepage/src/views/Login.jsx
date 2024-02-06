@@ -14,10 +14,31 @@ import {
 
 import {useState} from "react";
 import {axiosApi} from "../lib/axiosApi";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+    const navigate = useNavigate();
+
     const [userId, setUserId] = useState(false);
     const [userPassword, setUserPassword] = useState(false);
+
+    const clickLoginButton = (userId, userPassword) => {
+
+        const res = axiosApi.get('/api/v1/auth/user/login', {
+            params:
+                {
+                    userId: userId,
+                    password: userPassword
+                }
+        }).then(e => {
+            navigate('/dashboard')
+        })
+            .catch(e => {
+                console.log(e)
+            });
+
+        return ;
+    }
 
     return (
         <>
@@ -57,7 +78,7 @@ const Login = () => {
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
-                                        onClick={e => {setUserId(e.target.value)}}
+                                        onChange={e => {setUserId(e.target.value)}}
                                         placeholder="아이디"
                                         type="email"
                                         autoComplete="new-email"
@@ -72,7 +93,7 @@ const Login = () => {
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
-                                        onClick={e => {setUserPassword(e.target.value)}}
+                                        onChange={e => {setUserPassword(e.target.value)}}
                                         placeholder="패스워드 입력"
                                         type="password"
                                         autoComplete="new-password"
@@ -93,7 +114,7 @@ const Login = () => {
                                 </label>
                             </div>
                             <div className="text-center">
-                                <Button onClick={clickLoginButton(userId, userPassword)} className="my-4 sign-button" color="primary" type="button" size="lg">
+                                <Button onClick={() => clickLoginButton(userId, userPassword)} className="my-4 sign-button" color="primary" type="button" size="lg">
                                     로그인
                                 </Button>
                             </div>
@@ -128,18 +149,6 @@ const Login = () => {
             </Col>
         </>
     );
-}
-
-const clickLoginButton = (userId, userPassword) => {
-    const res = axiosApi.get('/api/v1/auth/user/login', {
-        params:
-            {
-                userId: userId,
-                userPassword: userPassword
-            }
-    });
-
-    return ;
 }
 
 export default Login;

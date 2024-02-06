@@ -61,7 +61,7 @@ public class MailService {
                 mailRequestEntity -> {
                     AtomicBoolean isVerifiedAtomic = new AtomicBoolean(false);
                     mailRequestEntity.getRequests().forEach(requestMailDto -> {
-                        if (LocalDateTime.now().minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(String.format("%06d", code))) {
+                        if (LocalDateTime.now().minus(mailVerifyExpireTime, ChronoUnit.MINUTES).isBefore(requestMailDto.getRequestTime()) && !requestMailDto.isVerified() && requestMailDto.getCode().equals(code)) {
                             requestMailDto.setVerified(true);
                             isVerifiedAtomic.set(true);
                         }
