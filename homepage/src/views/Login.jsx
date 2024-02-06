@@ -12,12 +12,12 @@ import {
     Col,
 } from "reactstrap";
 
-import { Modal } from 'flowbite-react';
 import {useState} from "react";
+import {axiosApi} from "../lib/axiosApi";
 
-
-export default function Login() {
-    const [openModal, setOpenModal] = useState(false);
+const Login = () => {
+    const [userId, setUserId] = useState(false);
+    const [userPassword, setUserPassword] = useState(false);
 
     return (
         <>
@@ -57,7 +57,8 @@ export default function Login() {
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
-                                        placeholder="Email"
+                                        onClick={e => {setUserId(e.target.value)}}
+                                        placeholder="아이디"
                                         type="email"
                                         autoComplete="new-email"
                                     />
@@ -71,7 +72,8 @@ export default function Login() {
                                         </InputGroupText>
                                     </input-group-addon>
                                     <Input
-                                        placeholder="Password"
+                                        onClick={e => {setUserPassword(e.target.value)}}
+                                        placeholder="패스워드 입력"
                                         type="password"
                                         autoComplete="new-password"
                                     />
@@ -91,7 +93,7 @@ export default function Login() {
                                 </label>
                             </div>
                             <div className="text-center">
-                                <Button className="my-4 sign-button" color="primary" type="button" size="lg">
+                                <Button onClick={clickLoginButton(userId, userPassword)} className="my-4 sign-button" color="primary" type="button" size="lg">
                                     로그인
                                 </Button>
                             </div>
@@ -127,3 +129,17 @@ export default function Login() {
         </>
     );
 }
+
+const clickLoginButton = (userId, userPassword) => {
+    const res = axiosApi.get('/api/v1/auth/user/login', {
+        params:
+            {
+                userId: userId,
+                userPassword: userPassword
+            }
+    });
+
+    return ;
+}
+
+export default Login;
