@@ -27,7 +27,7 @@ public class QItemEntity extends EntityPathBase<ItemEntity> {
 
     public final NumberPath<Integer> idx = createNumber("idx", Integer.class);
 
-    public final ComparablePath<java.util.UUID> ItemGUID = createComparable("ItemGUID", java.util.UUID.class);
+    public final ComparablePath<java.util.UUID> itemGuid = createComparable("itemGuid", java.util.UUID.class);
 
     public final NumberPath<Long> price = createNumber("price", Long.class);
 

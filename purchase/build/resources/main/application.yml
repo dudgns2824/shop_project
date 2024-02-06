@@ -1,6 +1,6 @@
 ## 서버 설정
 server:
-  port: 8080
+  port: 8081
   shutdown: graceful
   name: purchase
  
@@ -89,7 +89,7 @@ springdoc:
   cache.disabled: true
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
-  server.url: http://localhost:8080
+  server.url: http://localhost:8081
 
 ## JWT 설정
 jwt:
