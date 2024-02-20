@@ -17,22 +17,9 @@ public class UserRepositorySupport {
 
     private final JPAQueryFactory queryFactory;
 
-    public UserTokenEntity getTokenEntity(UUID userGUID) {
-/*        if (userGUID == null) {
-            return null;
-        }
-
-        QUserTokenEntity qUserTokenEntity = QUserTokenEntity.userTokenEntity;
-
-        return queryFactory
-                .selectFrom(qUserTokenEntity)
-                .where(qUserTokenEntity.id.userGuid.eq(userGUID))
-                .fetchFirst();*/
-        return null;
-    }
-
+    /*유저 토큰 정보*/
     public UserTokenDto getUserTokenDtoByUserGUID(UUID UserGUID) {
-/*        if(UserGUID == null) {
+        if(UserGUID == null) {
             return null;
         }
 
@@ -40,13 +27,12 @@ public class UserRepositorySupport {
 
         return queryFactory
                 .select(Projections.bean(UserTokenDto.class,
-                        qUserTokenEntity.id.userGuid.as("userGUID"),
+                        qUserTokenEntity.id.userGUID.as("userGUID"),
                         qUserTokenEntity.id.refreshToken.as("refreshToken")
                 ))
                 .from(qUserTokenEntity)
-                .where(qUserTokenEntity.id.userGuid.eq(UserGUID))
-                .fetchFirst();*/
-        return null;
+                .where(qUserTokenEntity.id.userGUID.eq(UserGUID))
+                .fetchFirst();
     }
 
 }

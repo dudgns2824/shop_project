@@ -6702,6 +6702,10 @@ a.close.disabled {
     opacity: 1;
 }
 
+.dashboard-background {
+    height: 100%;
+}
+
 .carousel-caption {
     position: absolute;
     right: 15%;
@@ -14706,8 +14710,20 @@ button.section-darker:focus {
     stroke: #172b4d;
 }
 
+.row-padding-top {
+    padding-top: 20px;
+}
+
 .fill-white {
     fill: #fff;
+}
+
+.font-white {
+    color: white;
+}
+
+.fill-home-background {
+    fill: #e5e5e5;
 }
 
 .stroke-white {
