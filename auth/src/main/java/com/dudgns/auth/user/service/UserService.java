@@ -93,57 +93,61 @@ public class UserService {
     public ResponseUserLoginDto loginUser(String userId, String password) {
         UserEntity user = null;
 
-        if (userId != null && !userId.equals("")) {
-            user = userRepository.findUserByUserId(userId);
-        } else {
-            throw new LoginFailedException();
-        }
 
-        if (passwordEncoder.matches(password, user.getPassword())) {
-            Optional<AccessTokenEntity> accessTokenEntityOptional = accessTokenRepository.findById(user.getUserGUID());
-
-            AccessTokenEntity accessTokenEntity = null;
-
-            if (accessTokenEntityOptional.isPresent()) {
-                accessTokenEntity = accessTokenEntityOptional.get();
-            } else {
-                accessTokenEntity = accessTokenRepository.save(AccessTokenEntity.builder()
-                        .accessToken(jwtTokenProvider.createToken(user))
-                        .userGUID(user.getUserGUID())
-                        .build());
+        try{
+            if (userId != null && !userId.equals("")) {
+                user = userRepository.findUserByUserId(userId);
             }
 
-            Optional<UserTokenEntity> userTokenEntityOptional = userTokenRepository.findByUserGuid(user.getUserGUID());
+            if (passwordEncoder.matches(password, user.getPassword())) {
+                Optional<AccessTokenEntity> accessTokenEntityOptional = accessTokenRepository.findById(user.getUserGUID());
 
-            String token = jwtTokenProvider.createToken(user);
+                AccessTokenEntity accessTokenEntity = null;
 
-            if (userTokenEntityOptional.isPresent()) {
-                UserTokenEntity userTokenEntity = userTokenEntityOptional.get();
-                userTokenEntity.getId().setRefreshToken(token);
-                userTokenRepository.save(userTokenEntity);
-            } else {
-                userTokenRepository.save(UserTokenEntity.builder()
-                        .id(UserTokenId.builder()
-                                .userGUID(user.getUserGUID())
-                                .refreshToken(token)
-                                .build()
-                        )
-                        .expireDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS))
-                        .build());
-            }
-
-
-            return ResponseUserLoginDto.builder()
-                    .user(UserLoginDto.builder()
-                            .userId(user.getUserId())
+                if (accessTokenEntityOptional.isPresent()) {
+                    accessTokenEntity = accessTokenEntityOptional.get();
+                } else {
+                    accessTokenEntity = accessTokenRepository.save(AccessTokenEntity.builder()
+                            .accessToken(jwtTokenProvider.createToken(user))
                             .userGUID(user.getUserGUID())
-                            .email(user.getUserEmail())
-                            .build())
-                    .accessToken(accessTokenEntity.getAccessToken())
-                    .build();
-        } else {
+                            .build());
+                }
+
+                Optional<UserTokenEntity> userTokenEntityOptional = userTokenRepository.findByUserGuid(user.getUserGUID());
+
+                String token = jwtTokenProvider.createToken(user);
+
+                if (userTokenEntityOptional.isPresent()) {
+                    UserTokenEntity userTokenEntity = userTokenEntityOptional.get();
+                    userTokenEntity.getId().setRefreshToken(token);
+                    userTokenRepository.save(userTokenEntity);
+                } else {
+                    userTokenRepository.save(UserTokenEntity.builder()
+                            .id(UserTokenId.builder()
+                                    .userGUID(user.getUserGUID())
+                                    .refreshToken(token)
+                                    .build()
+                            )
+                            .expireDate(LocalDateTime.now().plus(1, ChronoUnit.DAYS))
+                            .build());
+                }
+
+
+                return ResponseUserLoginDto.builder()
+                        .user(UserLoginDto.builder()
+                                .userId(user.getUserId())
+                                .userGUID(user.getUserGUID())
+                                .email(user.getUserEmail())
+                                .build())
+                        .accessToken(accessTokenEntity.getAccessToken())
+                        .build();
+            } else {
+                throw new LoginFailedException();
+            }
+        }catch (Exception e) {
             throw new LoginFailedException();
         }
+
     }
 
 }
