@@ -1,9 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import MainRoutes from './MainRoutes';
-import AuthRoutes from './AuthRoutes';
 import { useAuthStore } from '@/stores/auth';
 import { useUIStore } from '@/stores/ui';
-import axios from 'axios';
+import axios from "axios";
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,8 +11,7 @@ export const router = createRouter({
             path: '/:pathMatch(.*)*',
             component: () => import('@/views/pages/maintenance/error/Error404Page.vue')
         },
-        MainRoutes,
-        AuthRoutes
+        MainRoutes
     ]
 });
 
@@ -28,9 +26,7 @@ interface User {
 interface AuthStore {
     user: User | null;
     returnUrl: string | null;
-
     login(username: string, password: string): Promise<void>;
-
     logout(): void;
 }
 
@@ -44,32 +40,37 @@ router.beforeEach(async (to, from, next) => {
         withCredentials: true
     });
     // redirect to login page if not logged in and trying to access a restricted page
-    const publicPages = ['/auth/login'];
-    const authRequired = !publicPages.includes(to.path);
+    const authRequired = to.path !== '/';
     const auth = useAuthStore();
 
+    console.log(to.path)
+
     if (authRequired) {
-        if (authRequired && (localStorage.getItem('access_token') == null || localStorage.getItem('access_token') == '')) {
+        if (authRequired && (localStorage.getItem("access_token") == null || localStorage.getItem("access_token") == "")) {
             auth.returnUrl = to.fullPath;
-            return next('/auth/login');
+            return next("/");
         } else {
             axiosApi
-                .get('/api/ubhWeb/auth/healthCheck')
-                .then((e) => {
+                .get('/api/admin/auth/healthCheck')
+                .then(e => {
                     next();
                 })
-                .catch((e) => {
+                .catch(e => {
                     localStorage.removeItem('access_token');
+                    localStorage.removeItem('user_id');
                     localStorage.removeItem('user_no');
-                    return next('/auth/login');
-                });
+                    localStorage.removeItem('user_name');
+                    localStorage.removeItem('role');
+                    localStorage.removeItem('readonly');
+                    return next("/");
+                })
         }
     } else {
         if (!authRequired) {
             next();
         }
     }
-    next();
+    next()
 });
 
 router.beforeEach(() => {
