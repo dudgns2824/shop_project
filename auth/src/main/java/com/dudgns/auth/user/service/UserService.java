@@ -94,7 +94,7 @@ public class UserService {
         UserEntity user = null;
 
 
-        try{
+        try {
             if (userId != null && !userId.equals("")) {
                 user = userRepository.findUserByUserId(userId);
             }
@@ -110,6 +110,7 @@ public class UserService {
                     accessTokenEntity = accessTokenRepository.save(AccessTokenEntity.builder()
                             .accessToken(jwtTokenProvider.createToken(user))
                             .userGUID(user.getUserGUID())
+                            .expire(900L)
                             .build());
                 }
 
@@ -144,7 +145,7 @@ public class UserService {
             } else {
                 throw new LoginFailedException();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             throw new LoginFailedException();
         }
 

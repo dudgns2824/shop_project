@@ -1,4 +1,4 @@
-package com.dudgns.purchase.item.dto;
+package com.dudgns.purchase.goods.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class ResponseItemInfoDto {
-    private String itemGuid;
+public class ResponseGoodsInfoDto {
+    private String goodsGuid;
     private Integer amount;
-    private Long price;
+    private Integer price;
     private String company;
     private String description;
     private Boolean sale;
